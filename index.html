@@ -9,38 +9,60 @@
 <button onclick="audio.pause()">暂停</button>
 <button onclick="audio.play()">继续</button>
 
+<br>
 <input type="range" name="slide" id="slide" style="width:300px;" value="0">
+<br>
+
 <script src="index.js"></script>
 <script>
-	var i = 1,
+	var i = 0,
 		slide = document.getElementById('slide'),
-		audio = new Audio();
-
-	audio.src = "mp3/hysxm.mp3";
+		slide1 = document.getElementById('slide1'),
+		audio = new Audio(),
+		mp3s = [
+			"http://wayou.github.io/selected/content/songs/na_ge.mp3",
+			"http://wayou.github.io/selected/content/songs/dong_tian_de_mi_mi.mp3",
+			"http://wayou.github.io/selected/content/songs/lin_yu_yi_zhi_zou.mp3",
+			"http://wayou.github.io/selected/content/songs/xun_xun_mi_mi.mp3"
+		];
 	document.body.appendChild( audio );
-	
-	audio.play();
-	audio.onplay = function(e){
-		//console.log( "play" );
-	};
-	audio.ontimeupdate = function(e){
-		var duration = isFinite(audio.duration) ? audio.duration : audio.currentTime + 1000 * 60 * 2; 
-		slide.value = audio.currentTime * 100 / duration;
-	};
-	audio.onended = function(e){
-		switch_mp3();
-	}
 
-	slide.onchange = function(){
-		var duration = isFinite(audio.duration) ? audio.duration : audio.currentTime + 1000 * 60 * 2; 
-		audio.currentTime = slide.value * duration / 100;
-	};
+	var focus;
+	setTimeout(function(){	//flash加载
+		audio.load( mp3s[0] );
+		audio.play();
+
+		audio.ontimeupdate = function(e){	// 进度条事件, flash 版本没有详细事件
+			if( Audio.flash ){
+				audio.duration = 100;
+			}
+			if( !focus ){
+				slide.value = audio.currentTime * 100 / audio.duration;
+			}
+		};
+		audio.onended = function(e){
+			switch_mp3();
+		}
+
+		slide.onfocus = function(){
+			focus = true;
+		};
+		slide.onblur = function(){
+			focus = false;
+		};
+		slide.onchange = function(){
+			audio.setPercent( this.value / 100 );
+		};
+
+
+	},1000);
 
 	function switch_mp3 () {
-		i = (i+1) % 2;
-		audio.src = ["mp3/dh.mp3","mp3/hysxm.mp3"][i];
+		i = (i+1) % mp3s.length;
+		audio.load( mp3s[i] );
 		audio.play();
 	}
+
 
 </script>
 </body>
