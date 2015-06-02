@@ -78,38 +78,34 @@
 
             // load方法代替src设置
             div.load = function(path){
-                try{
-                    new niftyplayer(id).load(path);
-                }catch(e){ console.log(e); };
+                new niftyplayer(id).load(path);
             };
             // 此方法无用, 原flash不支持
             div.setPercent = function(per){
-                try{
-                    new niftyplayer(id).obj.SetVariable('skipTo', per);
-                    new niftyplayer(id).obj.TCallLabel('/','skipTo');
-                }catch(e){ console.log(e); };
+                //TODO
             };
             // play 方法模拟
             div.play = function(){
-                try{
-                    new niftyplayer(id).play();
-                }catch(e){ console.log(e); };
+                new niftyplayer(id).play();
             };
             // pause 方法模拟
             div.pause = function(){
-                try{
-                    new niftyplayer(id).pause();
-                }catch(e){ console.log(e); };
+                new niftyplayer(id).pause();
             }
             // 初始化空方法, 省得调用判断
             div.ontimeupdate = function(){};
+            div.onload = function(){};
             div.onended = function(){};
             div.duration = 100;     //flash拿不到MP3时长, 姑且用百分比 
             
-            var withEnd = false;    // 模拟onended事件需要判断是不是到达结束位置
+            var withEnd = false, loaded = false;    // 模拟onended事件需要判断是不是到达结束位置
             setInterval(function(){
                 var obj;
                 if( obj = new niftyplayer(id).obj ){
+                    if( !loaded ){  // flash加载完成
+                        loaded = true;
+                        div.onload();
+                    }
                     // 156.85是flash的内部进度条总长度, pointer._x 是游标位置, 所以currentTime 只是一个表示百分比的数值
                     div.currentTime = obj.GetVariable("pointer._x") * div.duration / 156.85; 
 
