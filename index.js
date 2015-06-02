@@ -101,7 +101,7 @@
             var withEnd = false, loaded = false;    // 模拟onended事件需要判断是不是到达结束位置
             setInterval(function(){
                 var obj;
-                if( obj = new niftyplayer(id).obj ){
+                if( obj = new niftyplayer(id).obj && obj.GetVariable ){
                     if( !loaded && ( new niftyplayer(id).load ) ){  // flash加载完成
                         loaded = true;
                         div.onload();
