@@ -32,9 +32,6 @@
 		audio.play();
 
 		audio.ontimeupdate = function(e){	// 进度条事件, flash 版本没有详细事件
-			if( Audio.flash ){
-				audio.duration = 100;
-			}
 			if( !focus ){
 				slide.value = audio.currentTime * 100 / audio.duration;
 			}
