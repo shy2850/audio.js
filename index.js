@@ -101,24 +101,26 @@
             var withEnd = false, loaded = false;    // 模拟onended事件需要判断是不是到达结束位置
             setInterval(function(){
                 var player = new niftyplayer(id), obj = player.obj;
-                if( obj && obj.GetVariable ){
-                    if( !loaded && player.load ){  // flash加载完成
-                        loaded = true;
-                        div.onload();
-                    }
-                    // 156.85是flash的内部进度条总长度, pointer._x 是游标位置, 所以currentTime 只是一个表示百分比的数值
-                    div.currentTime = obj.GetVariable("pointer._x") * div.duration / 156.85; 
-
-                    if( div.currentTime === div.duration){
-                        if(!withEnd){   // 首次到达结束, 触发
-                            withEnd = true;
-                            div.onended();
+                try{
+                    if( obj && obj.GetVariable ){
+                        if( !loaded && player.load ){  // flash加载完成
+                            loaded = true;
+                            div.onload();
                         }
-                    }else{      // 否则 结束位标识 置false
-                        withEnd = false;
-                        div.ontimeupdate();
+                        // 156.85是flash的内部进度条总长度, pointer._x 是游标位置, 所以currentTime 只是一个表示百分比的数值
+                        div.currentTime = obj.GetVariable("pointer._x") * div.duration / 156.85; 
+
+                        if( div.currentTime === div.duration){
+                            if(!withEnd){   // 首次到达结束, 触发
+                                withEnd = true;
+                                div.onended();
+                            }
+                        }else{      // 否则 结束位标识 置false
+                            withEnd = false;
+                            div.ontimeupdate();
+                        }
                     }
-                }
+                }catch(e){}
             },200);
             return div;
         };
