@@ -102,7 +102,7 @@
             setInterval(function(){
                 var obj;
                 if( obj = new niftyplayer(id).obj ){
-                    if( !loaded ){  // flash加载完成
+                    if( !loaded && ( new niftyplayer(id).load ) ){  // flash加载完成
                         loaded = true;
                         div.onload();
                     }
