@@ -27,8 +27,7 @@
 		];
 	document.body.appendChild( audio );
 
-	var focus;
-	setTimeout(function(){	//flash加载
+	var focus, loadFn = function(){	//flash加载
 		audio.load( mp3s[0] );
 		audio.play();
 
@@ -54,8 +53,14 @@
 			audio.setPercent( this.value / 100 );
 		};
 
-
-	},1000);
+	};
+	
+	// flash需要额外绑定事件。
+	if( window.Audio.flash ){
+		audio.onload = loadFn;
+	}else{
+		loadFn();
+	}
 
 	function switch_mp3 () {
 		i = (i+1) % mp3s.length;
