@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>Audio.js</title>
 </head>
 <body>
 <button onclick="switch_mp3()">换歌</button>
@@ -10,12 +10,15 @@
 <button onclick="audio.play()">继续</button>
 
 <br>
+<input type="range" name="volume" id="volume" value="100"> 音量
+<br>
 <input type="range" name="slide" id="slide" style="width:300px;" value="0">
 <br>
 
 <script src="index.js"></script>
 <script>
 	var i = 0,
+		volume = document.getElementById('volume'),
 		slide = document.getElementById('slide'),
 		slide1 = document.getElementById('slide1'),
 		audio = new Audio(),
@@ -49,7 +52,9 @@
 		slide.onchange = function(){
 			audio.setPercent( this.value / 100 );
 		};
-
+		volume.onchange = function(){
+			audio.setVolume( this.value / 100 );
+		}
 	};
 	
 	// flash需要额外绑定事件。
