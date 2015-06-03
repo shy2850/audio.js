@@ -40,6 +40,9 @@
         this.load = function (url) {
             call( this.obj, "resetSound", [url,5000] );
         };
+        this.setVolume = function (volume){
+            call( this.obj, "setVolume", [volume] );
+        };
         return this;
     }
 
@@ -54,6 +57,9 @@
         Audio.prototype.setPercent = function(per){
             this.currentTime = this.duration * per;
         }
+        Audio.prototype.setVolume = function(volume){
+            this.volume = volume;
+        };
 
 		return ;
 	}else{
@@ -67,14 +73,13 @@
 
         //支持情况下，拿到相对的flash路径
 		var baseUrl = document.scripts[document.scripts.length-1].src.replace("index.js",""),
-            swfUrl = baseUrl + "swf/NewsPlayer.swf";
+            swfUrl = baseUrl + "swf/NewsPlayer.swf",
+            idIndex = 0;
 
 		//flash承载体模拟Audio
 		window.Audio = function (id){
 			var div = document.createElement("div");
-            id = id || "NewsPlayer";
-            
-            
+            id = id || ("NewsPlayer" + idIndex++);
             
             div.style.position = "absolute";
 			div.style.left = "-20000em"; // 悄悄躲起来不让看见
@@ -102,7 +107,11 @@
             // pause 方法模拟
             div.pause = function(){
                 new Player(id).pause();
-            }
+            };
+            // 音量设置
+            div.setVolume = function(volume){
+                new Player(id).setVolume(volume);
+            };
             // 初始化空方法, 省得调用判断
             div.ontimeupdate = function(){};
             div.onload = function(){};
