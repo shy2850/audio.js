@@ -117,12 +117,16 @@
             div.onload = function(){};
             div.onended = function(){};
 
+            var updateTime = 0;
             window.Audio[id] = {
                 setProgress: function(args){
                     var spl = (args+"").split(",");
-                    div.currentTime = Number(spl[0]) || 0;
+                    div.currentTime = Number(spl[0]) / 1000 || 0;
                     div.duration = Number(spl[1]) || 0;
-                    div.ontimeupdate();
+                    if(updateTime !== div.currentTime){
+                        div.ontimeupdate();
+                    }
+                    updateTime = div.currentTime;
                 },
                 playEnd: function(){
                     div.onended();
